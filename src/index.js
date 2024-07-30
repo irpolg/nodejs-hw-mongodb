@@ -2,8 +2,12 @@ import { setupServer } from './server.js';
 import { initMongoConnection } from './db/initMongoConnection.js';
 
 const bootstrap = async () => {
-  await initMongoConnection();
-  setupServer();
+  try {
+    await initMongoConnection();
+    setupServer();
+  } catch (error) {
+    console.error('error-index.js ', error);
+  }
 };
 
 bootstrap();
