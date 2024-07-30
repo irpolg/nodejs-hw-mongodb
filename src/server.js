@@ -43,8 +43,8 @@ export const setupServer = () => {
     });
   });
 
-  app.get('/contacts/:contactId', async (req, res, next) => {
-    const contactId = req.params.contactId;
+  app.get('/contacts/:contactId', async (req, res) => {
+    const { contactId } = req.params;
     const contact = await getContactById(contactId);
 
     if (!contact) {
@@ -63,7 +63,7 @@ export const setupServer = () => {
 
   app.use('*', (req, res) => {
     res.status(404).json({
-      message: 'Not found',
+      message: 'Page not found',
     });
   });
 
