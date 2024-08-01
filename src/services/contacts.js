@@ -4,6 +4,9 @@ export const getAllContacts = () => ContactsCollection.find();
 
 export const getContactById = (id) => ContactsCollection.findById(id);
 
+export const createContact = (contactData) =>
+  ContactsCollection.create(contactData);
+
 // export const getAllContacts = async () => {
 //   return await ContactsCollection.find();
 // };
