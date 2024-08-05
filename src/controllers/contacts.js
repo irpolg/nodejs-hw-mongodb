@@ -1,6 +1,4 @@
-// 02-08-2024
-//Для зручного створення помилок скористаємось
-//пакетом http - error
+//пакет http - error - для зручного створення помилок
 //Інсталюємо його командою: npm install http-errors
 import createHttpError from 'http-errors';
 
@@ -9,8 +7,7 @@ import {
   getContactById,
   createContact,
   deleteContact,
-  updateContact,
-  changeContactNumberPhone,
+  patchContactPhone,
 } from '../services/contacts.js';
 
 export const getAllContactsController = async (req, res, next) => {
@@ -23,7 +20,6 @@ export const getIdContactController = async (req, res, next) => {
   const contact = await getContactById(contactId);
 
   if (contact === null) {
-    // return next(createHttpError[404]("Contact not found"));
     return next(createHttpError.NotFound('Contact not found'));
   }
   res.status(200).json({
@@ -43,55 +39,32 @@ export const createContactController = async (req, res) => {
   });
 };
 
-export async function deleteContactController(req, res, next) {
+export const deleteContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const deletedContact = await deleteContact(contactId);
-
-  if (deletedContact === null) {
-    return next(createHttpError.NotFound('Contact not found'));
+  if (!deletedContact) {
+    throw createHttpError(404, 'Contact not found');
   }
-  res.status(204).end();
-}
+  //res.status(204).end();
+  res.sendStatus(204);
+};
 
-export async function updateContactController(req, res, next) {
+//конспект
+export const patchContactPhoneController = async (req, res, next) => {
   const { contactId } = req.params;
-  const contact = {
-    name: req.body.name,
-    phoneNumber: req.body.phoneNumber,
-    contactType: req.body.contactType,
-    email: req.body.email,
-  };
-  const updateResult = await updateContact(contactId, contact);
+  const patchContact = await patchContactPhone(contactId, req.body);
 
-  if (updateResult.lastErrorObject.updatedExisting === true) {
-    return res.send({
-      status: 200,
-      message: 'Contact updated',
-      data: updateResult.value,
-    });
+  if (!patchContact) {
+    next(createHttpError(404, 'Contact not found'));
+    return;
   }
 
-  res.status(201).send({
-    status: 201,
-    message: 'Contact created',
-    data: updateResult.value,
-  });
-}
-
-export async function changeContactNumberController(req, res, next) {
-  const { contactId } = req.params;
-  const { inputNumber } = req.body;
-  const updatedContact = await changeContactNumberPhone(contactId, inputNumber);
-
-  if (updatedContact === null) {
-    return next(createHttpError.NotFound('Contact not found'));
-  }
-  res.send({
+  res.json({
     status: 200,
-    message: 'Contact duty updated',
-    data: updatedContact,
+    message: `Successfully patched a contact!`,
+    data: patchContact.contact,
   });
-}
+};
 
 //Виклик next передає керування до наступного middleware
 //в ланцюжку обробки запитів, але код в тілі самого
