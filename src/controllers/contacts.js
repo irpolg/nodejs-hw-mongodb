@@ -10,6 +10,8 @@ import {
   patchContactPhone,
 } from '../services/contacts.js';
 
+import { contactSchema } from '../validation/contacts.js'; //hw-4  08-08-2024
+
 export const getAllContactsController = async (req, res, next) => {
   const contacts = await getAllContacts();
   res.send({ status: 200, data: contacts });
@@ -30,8 +32,21 @@ export const getIdContactController = async (req, res, next) => {
 };
 
 export const createContactController = async (req, res) => {
-  console.log(req.body);
+  console.log('req.body >>', req.body);
+  // const contact = {
+  //     name: req.body.name,
+  //     phoneNumber: req.body.phoneNumber,
+  //     email: req.body.email,
+  //     isFavorite: req.body.isFavorite,
+  //     contactType: req.body.contactType,
+  // };                                 //hw-4  08-08-2024
+  // contactSchema.validate(contact);   //hw-4  08-08-2024
+
+  const result = contactSchema.validate(req.body); //hw-4  08-08-2024
+  console.log('result = contactSchema.validate>>', result); //hw-4  08-08-2024
+
   const newContact = await createContact(req.body);
+
   res.status(201).json({
     status: 201,
     message: 'Successfully created a contact!',
