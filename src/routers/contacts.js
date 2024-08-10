@@ -5,11 +5,14 @@ import {
   getIdContactController,
   createContactController,
   deleteContactController,
-  patchContactPhoneController,
+  patchContactFavouriteController,
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middleware/validateBody.js';
-import { contactSchema } from '../validation/contacts.js';
+import {
+  contactSchema,
+  contactFavoriteSchema,
+} from '../validation/contacts.js';
 
 // const router = Router();
 const router = express.Router();
@@ -28,10 +31,10 @@ router.post(
 
 // конспект
 router.patch(
-  '/contacts/:contactId',
+  '/contacts/:contactId/favourite',
   jsonParser,
-  validateBody(contactSchema),
-  ctrlWrapper(patchContactPhoneController),
+  validateBody(contactFavoriteSchema),
+  ctrlWrapper(patchContactFavouriteController),
 );
 
 router.delete('/contacts/:contactId', ctrlWrapper(deleteContactController));
@@ -39,13 +42,3 @@ router.delete('/contacts/:contactId', ctrlWrapper(deleteContactController));
 export default router;
 
 //router.put('/contacts/:contactId', ctrlWrapper(updateContactController));
-
-//вебінар 2 - no change phone in Database
-//import express from 'express';
-//const router = express.Router();
-//const jsonParser = express.json();
-// router.patch(
-//   '/contacts/:contactId/phone',
-//   jsonParser,
-//   ctrlWrapper(patchContactPhoneController),
-// );

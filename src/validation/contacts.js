@@ -16,7 +16,7 @@ export const contactSchema = Joi.object({
     .required(),
 });
 
-// вебінар 07-08-2024
-// export const studentDutySchema = Joi.object({
-//   duty: Joi.boolean().required(),
-// });
+// див вебінар 07-08-2024  01-15-00
+export const contactFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});

@@ -1,5 +1,3 @@
-//пакет http - error - для зручного створення помилок
-//Інсталюємо його командою: npm install http-errors
 import createHttpError from 'http-errors';
 
 import {
@@ -7,10 +5,8 @@ import {
   getContactById,
   createContact,
   deleteContact,
-  patchContactPhone,
+  patchContactFavourite,
 } from '../services/contacts.js';
-
-//10-08-2024 del-  import { contactSchema } from '../validation/contacts.js'; //hw-4  08-08-2024
 
 export const getAllContactsController = async (req, res, next) => {
   const contacts = await getAllContacts();
@@ -39,15 +35,7 @@ export const createContactController = async (req, res) => {
     email: req.body.email,
     isFavorite: req.body.isFavorite,
     contactType: req.body.contactType,
-  }; //hw-4 закрила 08-08-2024 і 10-08-2024 відкрила
-  // contactSchema.validate(contact);   //hw-4  08-08-2024
-
-  //10-08 del- const result = contactSchema.validate(req.body, { abortEarly: false }); //hw-4  08-08-2024
-  //10-08 del- console.log('result = contactSchema.validate>>', result); //hw-4  08-08-2024
-  //умову перенесли в middleware/validatebody.js
-
-  //   const newContact = await createContact(req.body); 10-08-2024
-  //const newContact = await createContact(result.value); 10-08-2024 закрила
+  };
 
   const newContact = await createContact(contact); //10-08-2024
   // res.status(201).json({
@@ -68,11 +56,11 @@ export const deleteContactController = async (req, res, next) => {
   res.sendStatus(204);
 };
 
-//конспект
-export const patchContactPhoneController = async (req, res, next) => {
+export const patchContactFavouriteController = async (req, res, next) => {
   const { contactId } = req.params;
-  const patchContact = await patchContactPhone(contactId, req.body);
+  const { favorite } = req.body;
 
+  const patchContact = await patchContactFavourite(contactId, favorite);
   if (!patchContact) {
     next(createHttpError(404, 'Contact not found'));
     return;
