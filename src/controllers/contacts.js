@@ -10,7 +10,7 @@ import {
   patchContactPhone,
 } from '../services/contacts.js';
 
-import { contactSchema } from '../validation/contacts.js'; //hw-4  08-08-2024
+//10-08-2024 del-  import { contactSchema } from '../validation/contacts.js'; //hw-4  08-08-2024
 
 export const getAllContactsController = async (req, res, next) => {
   const contacts = await getAllContacts();
@@ -32,22 +32,26 @@ export const getIdContactController = async (req, res, next) => {
 };
 
 export const createContactController = async (req, res) => {
-  console.log('req.body >>', req.body);
-  // const contact = {
-  //     name: req.body.name,
-  //     phoneNumber: req.body.phoneNumber,
-  //     email: req.body.email,
-  //     isFavorite: req.body.isFavorite,
-  //     contactType: req.body.contactType,
-  // };                                 //hw-4  08-08-2024
+  //console.log('req.body >>', req.body);
+  const contact = {
+    name: req.body.name,
+    phoneNumber: req.body.phoneNumber,
+    email: req.body.email,
+    isFavorite: req.body.isFavorite,
+    contactType: req.body.contactType,
+  }; //hw-4 закрила 08-08-2024 і 10-08-2024 відкрила
   // contactSchema.validate(contact);   //hw-4  08-08-2024
 
-  const result = contactSchema.validate(req.body); //hw-4  08-08-2024
-  console.log('result = contactSchema.validate>>', result); //hw-4  08-08-2024
+  //10-08 del- const result = contactSchema.validate(req.body, { abortEarly: false }); //hw-4  08-08-2024
+  //10-08 del- console.log('result = contactSchema.validate>>', result); //hw-4  08-08-2024
+  //умову перенесли в middleware/validatebody.js
 
-  const newContact = await createContact(req.body);
+  //   const newContact = await createContact(req.body); 10-08-2024
+  //const newContact = await createContact(result.value); 10-08-2024 закрила
 
-  res.status(201).json({
+  const newContact = await createContact(contact); //10-08-2024
+  // res.status(201).json({
+  res.status(201).send({
     status: 201,
     message: 'Successfully created a contact!',
     data: newContact, // дані створеного контакту

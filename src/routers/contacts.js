@@ -1,4 +1,5 @@
-import { Router } from 'express';
+//import { Router } from 'express';
+import express from 'express';
 import {
   getAllContactsController,
   getIdContactController,
@@ -7,17 +8,31 @@ import {
   patchContactPhoneController,
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import { validateBody } from '../middleware/validateBody.js';
+import { contactSchema } from '../validation/contacts.js';
 
-const router = Router();
+// const router = Router();
+const router = express.Router();
+const jsonParser = express.json();
 
 router.get('/contacts', ctrlWrapper(getAllContactsController));
 
 router.get('/contacts/:contactId', ctrlWrapper(getIdContactController));
 
-router.post('/contacts', ctrlWrapper(createContactController));
+router.post(
+  '/contacts',
+  jsonParser,
+  validateBody(contactSchema),
+  ctrlWrapper(createContactController),
+);
 
 // конспект
-router.patch('/contacts/:contactId', ctrlWrapper(patchContactPhoneController));
+router.patch(
+  '/contacts/:contactId',
+  jsonParser,
+  validateBody(contactSchema),
+  ctrlWrapper(patchContactPhoneController),
+);
 
 router.delete('/contacts/:contactId', ctrlWrapper(deleteContactController));
 
