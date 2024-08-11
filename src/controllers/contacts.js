@@ -12,7 +12,11 @@ import {
 export const getAllContactsController = async (req, res, next) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const contacts = await getAllContacts({ page, perPage });
-  res.send({ status: 200, data: contacts });
+  res.send({
+    status: 200,
+    message: 'Successfully found contacts!',
+    data: contacts,
+  });
 };
 
 export const getIdContactController = async (req, res, next) => {
