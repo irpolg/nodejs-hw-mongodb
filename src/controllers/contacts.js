@@ -33,9 +33,10 @@ export const createContactController = async (req, res) => {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
     email: req.body.email,
-    isFavorite: req.body.isFavorite,
+    isFavourite: req.body.isFavourite,
     contactType: req.body.contactType,
   };
+  // isFavorite: req.body.isFavorite, //11-08-2024
 
   const newContact = await createContact(contact); //10-08-2024
   // res.status(201).json({
@@ -58,9 +59,11 @@ export const deleteContactController = async (req, res, next) => {
 
 export const patchContactFavouriteController = async (req, res, next) => {
   const { contactId } = req.params;
-  const { favorite } = req.body;
+  const { favourite } = req.body;
+  //   const { favorite } = req.body; //11-08-2024
 
-  const patchContact = await patchContactFavourite(contactId, favorite);
+  //const patchContact = await patchContactFavourite(contactId, favorite); 11-08-2024
+  const patchContact = await patchContactFavourite(contactId, favourite);
   if (!patchContact) {
     next(createHttpError(404, 'Contact not found'));
     return;

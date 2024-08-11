@@ -11,7 +11,8 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middleware/validateBody.js';
 import {
   contactSchema,
-  contactFavoriteSchema,
+  contactFavouriteSchema,
+  //   contactFavoriteSchema, 11-08-2024
 } from '../validation/contacts.js';
 
 // const router = Router();
@@ -33,7 +34,7 @@ router.post(
 router.patch(
   '/contacts/:contactId/favourite',
   jsonParser,
-  validateBody(contactFavoriteSchema),
+  validateBody(contactFavouriteSchema), //11-08-2024
   ctrlWrapper(patchContactFavouriteController),
 );
 
