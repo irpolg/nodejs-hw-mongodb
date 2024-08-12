@@ -5,7 +5,16 @@ function parseSortBy(maybeSortBy) {
     return '_id';
   }
 
-  const keys = ['_id', 'name', 'phoneNumber', 'isFavourite'];
+  const keys = [
+    '_id',
+    'name',
+    'phoneNumber',
+    'email',
+    'isFavourite',
+    'contactType',
+    'createdAt',
+    'updatedAt',
+  ];
   if (keys.includes(maybeSortBy)) {
     return maybeSortBy;
   }
@@ -34,3 +43,5 @@ export function parseSortParams(query) {
     sortOrder: parsedSortOrder,
   };
 }
+
+//webinar+konspekt 12-08-2024

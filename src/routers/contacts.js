@@ -5,13 +5,15 @@ import {
   getIdContactController,
   createContactController,
   deleteContactController,
-  patchContactFavouriteController,
+  patchContactController,
+  //patchContactFavouriteController,
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middleware/validateBody.js';
 import {
   contactSchema,
-  contactFavouriteSchema,
+  contactPatchSchema,
+  //contactFavouriteSchema,
 } from '../validation/contacts.js';
 import { isValidId } from '../middleware/isValidId.js';
 
@@ -36,19 +38,26 @@ router.post(
 );
 
 // конспект
+// router.patch(
+//   '/contacts/:contactId/favourite',
+//   isValidId,
+//   //   isValidId('contactId'),
+//   jsonParser,
+//   validateBody(contactFavouriteSchema), //11-08-2024
+//   ctrlWrapper(patchContactFavouriteController),
+// );
+
 router.patch(
-  '/contacts/:contactId/favourite',
+  '/contacts/:contactId',
   isValidId,
-  //   isValidId('contactId'),
   jsonParser,
-  validateBody(contactFavouriteSchema), //11-08-2024
-  ctrlWrapper(patchContactFavouriteController),
+  validateBody(contactPatchSchema),
+  ctrlWrapper(patchContactController),
 );
 
 router.delete(
   '/contacts/:contactId',
-  isValidId,
-  //   isValidId('contactId'),
+  isValidId, //   isValidId('contactId'),
   ctrlWrapper(deleteContactController),
 );
 

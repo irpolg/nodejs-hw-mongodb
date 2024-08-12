@@ -7,7 +7,8 @@ import {
   getContactById,
   createContact,
   deleteContact,
-  patchContactFavourite,
+  patchContact,
+  //patchContactFavourite,
 } from '../services/contacts.js';
 
 export const getAllContactsController = async (req, res, next) => {
@@ -46,7 +47,6 @@ export const createContactController = async (req, res) => {
     isFavourite: req.body.isFavourite,
     contactType: req.body.contactType,
   };
-  // isFavorite: req.body.isFavorite, //11-08-2024
 
   const newContact = await createContact(contact); //10-08-2024
   // res.status(201).json({
@@ -67,22 +67,22 @@ export const deleteContactController = async (req, res, next) => {
   res.sendStatus(204);
 };
 
-export const patchContactFavouriteController = async (req, res, next) => {
+export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const { favourite } = req.body;
-  //   const { favorite } = req.body; //11-08-2024
 
-  //const patchContact = await patchContactFavourite(contactId, favorite); 11-08-2024
-  const patchContact = await patchContactFavourite(contactId, favourite);
-  if (!patchContact) {
+  //const updateData = req.body;
+  //const result = await patchContact(contactId, updateData);
+  const result = await patchContact(contactId, req.body);
+
+  if (!result) {
     next(createHttpError(404, 'Contact not found'));
     return;
   }
 
   res.json({
     status: 200,
-    message: `Successfully patched a contact!`,
-    data: patchContact.contact,
+    message: ' Successfully patched a contact!',
+    data: result.contact,
   });
 };
 
@@ -93,3 +93,23 @@ export const patchContactFavouriteController = async (req, res, next) => {
 //припинити виконання подальшого коду у контролері.
 //Частою помилкою початківця
 //є забувати додавати return в таких випадках.
+
+// favourite - patch цього поля обов'язковий
+// export const patchContactFavouriteController = async (req, res, next) => {
+//   const { contactId } = req.params;
+//   const { favourite } = req.body;
+//   //   const { favorite } = req.body; //11-08-2024
+
+//   //const patchContact = await patchContactFavourite(contactId, favorite); 11-08-2024
+//   const patchContact = await patchContactFavourite(contactId, favourite);
+//   if (!patchContact) {
+//     next(createHttpError(404, 'Contact not found'));
+//     return;
+//   }
+
+//   res.json({
+//     status: 200,
+//     message: `Successfully patched a contact!`,
+//     data: patchContact.contact,
+//   });
+// };
