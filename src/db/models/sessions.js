@@ -13,5 +13,6 @@ const sessionSchema = new Schema(
   },
 );
 
-export const SessionsCollection = model('session', sessionSchema);
+export const Session = model('Session', sessionSchema);
+//export const SessionsCollection = model('session', sessionSchema);
 //прийнято, що назва схеми sessionSchema - однина!!!

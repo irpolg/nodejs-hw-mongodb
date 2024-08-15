@@ -12,5 +12,6 @@ const userSchema = new Schema(
   },
 );
 
-export const UsersCollection = model('user', userSchema);
+export const User = model('User', userSchema);
+//export const UsersCollection = model('user', userSchema);
 //прийнято, що назва схеми userSchema - однина!!!
