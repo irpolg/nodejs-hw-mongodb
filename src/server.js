@@ -5,6 +5,7 @@ import pino from 'pino-http';
 import { errorHandler } from './middleware/errorHandler.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import contactsRouter from './routers/contacts.js';
+import authRouter from './routers/auth.js';
 
 //отримує значення змінної середовища 'PORT' або '3000'
 const PORT = Number(env('PORT', '3000'));
@@ -29,6 +30,9 @@ export const setupServer = () => {
     });
   });
   app.use(contactsRouter);
+
+  //   app.use('/auth', authRouter); //HW-5 17-08-2024
+  app.use(authRouter); //HW-5 17-08-2024
 
   app.use('*', notFoundHandler);
 
