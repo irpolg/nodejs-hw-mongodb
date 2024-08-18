@@ -1,9 +1,11 @@
 //import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
+import { Session } from '../db/models/sessions.js';
 //import { createHttpError } from 'http-error';
 
 //blended 17-08-2024
 import { User } from '../db/models/user.js';
+import { createSession } from '../utils/createSession.js';
 
 export const findUserByEmail = (email) => User.findOne({ email });
 
@@ -13,6 +15,11 @@ export const createUser = async (userData) => {
     ...userData,
     password: encryptedPassword,
   });
+};
+
+export const setupSession = async (userId) => {
+  await Session.deleteOne({ userId });
+  return Session.create({ userId, ...createSession() });
 };
 
 //web-1 mod-5

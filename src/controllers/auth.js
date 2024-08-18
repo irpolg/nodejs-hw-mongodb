@@ -1,9 +1,10 @@
 //import { registerUser } from '../services/auth.js';
 
 // //import { registerUser, loginUser } from '../services/auth.js';
-
+import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
-import { createUser, findUserByEmail } from '../services/auth.js';
+import { createUser, findUserByEmail, setupSession } from '../services/auth.js';
+import { setupCookie } from '../utils/setupCookie.js';
 
 export const registerUserController = async (req, res) => {
   const { name, email } = req.body;
@@ -14,12 +15,37 @@ export const registerUserController = async (req, res) => {
   }
 
   await createUser(req.body);
+
   res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
     data: {
       name,
       email,
+    },
+  });
+};
+
+export const loginUserController = async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await findUserByEmail(email);
+  if (!user) {
+    throw createHttpError(401, 'User not authorized!');
+  }
+
+  const isEqualPassword = bcrypt.compare(password, user.password);
+  if (!isEqualPassword) {
+    throw createHttpError(401, 'User not authorized!');
+  }
+
+  const userSession = await setupSession(user._id); // треба засетапити інф-ю про наші куки
+  setupCookie(res, userSession);
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully logged in an user!',
+    data: {
+      accessToken: userSession.accessToken,
     },
   });
 };
