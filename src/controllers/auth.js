@@ -5,6 +5,7 @@ import {
   findUserByEmail,
   setupSession,
   logoutUser,
+  refreshUserSession,
 } from '../services/auth.js';
 import { setupCookie } from '../utils/setupCookie.js';
 
@@ -54,7 +55,19 @@ export const loginUserController = async (req, res) => {
 
 export const refreshUserController = async (req, res) => {
   const { sessionId, refreshToken } = req.cookies;
-  res.send('Refresh'); //перевірили чи немає помилок для роута
+
+  const session = await refreshUserSession(sessionId, refreshToken); //отримаємо нову сесію
+
+  setupCookie(res, session);
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully refreshed a session!',
+    data: {
+      accessToken: session.accessToken,
+    },
+  });
+
+  //res.send('Refresh'); //перевірили чи немає помилок для роута
 };
 
 export const logoutController = async (req, res) => {

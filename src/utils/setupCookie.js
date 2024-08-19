@@ -2,11 +2,13 @@
 export const setupCookie = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
-    expire: 1000 * 60 * 60 * 24 * 30, //скільки живе токен
+    //expires: 1000 * 60 * 60 * 24, //скільки живе токен
+    expires: session.refreshTokenValidUntil,
   });
 
   res.cookie('sessionId', session._id, {
     httpOnly: true,
-    expire: 1000 * 60 * 60 * 24 * 30,
+    //expires: 1000 * 60 * 60 * 24,
+    expires: session.refreshTokenValidUntil,
   });
 };

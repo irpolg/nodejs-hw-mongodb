@@ -1,5 +1,7 @@
 //import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
+//import randomBytes from 'randomBytes';
+import crypto from 'node:crypto';
 import { Session } from '../db/models/sessions.js';
 //import { createHttpError } from 'http-error';
 
@@ -7,6 +9,7 @@ import { Session } from '../db/models/sessions.js';
 import { User } from '../db/models/user.js';
 import { createSession } from '../utils/createSession.js';
 import createHttpError from 'http-errors';
+import { ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL } from '../constants/index.js';
 
 export const findUserByEmail = (email) => User.findOne({ email });
 
@@ -32,6 +35,16 @@ export const refreshUserSession = async (sessionId, refreshToken) => {
   if (new Date() > new Date(session.refreshTokenValidUntil)) {
     throw createHttpError(401, 'Refresh token is expired');
   }
+
+  await Session.deleteOne({ _id: sessionId }); //видалили стару сесію
+
+  return Session.create({
+    userId: session.userId,
+    accessToken: crypto.randomBytes(30).toString('base64'),
+    refreshToken: crypto.randomBytes(30).toString('base64'),
+    accessTokenValidUntil: new Date(Date.now() + ACCESS_TOKEN_TTL),
+    refreshTokenValidUntil: new Date(Date.now() + REFRESH_TOKEN_TTL),
+  }); // згенерували нову сесію для користувача
 };
 
 export const logoutUser = async (sessionId) => {
