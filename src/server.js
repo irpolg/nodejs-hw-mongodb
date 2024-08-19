@@ -1,6 +1,6 @@
 import { env } from './utils/env.js';
 import express from 'express';
-//import cookieParser from 'cookie-parser'; // 19-08-2024 webinar2 - 16-08-2024
+import cookieParser from 'cookie-parser'; // 19-08-2024 webinar2 - 16-08-2024
 
 import cors from 'cors';
 import pino from 'pino-http';
@@ -14,7 +14,7 @@ const PORT = Number(env('PORT', '3000'));
 
 export const setupServer = () => {
   const app = express();
-  //app.use(cookieParser()); // 19-08-2024 webinar2 - 16-08-2024
+  app.use(cookieParser()); // 19-08-2024 webinar2 - 16-08-2024
   app.use(express.json());
   app.use(
     pino({

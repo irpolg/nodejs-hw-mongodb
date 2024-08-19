@@ -6,6 +6,7 @@ import { Session } from '../db/models/sessions.js';
 //blended 17-08-2024
 import { User } from '../db/models/user.js';
 import { createSession } from '../utils/createSession.js';
+import createHttpError from 'http-errors';
 
 export const findUserByEmail = (email) => User.findOne({ email });
 
@@ -22,9 +23,21 @@ export const setupSession = async (userId) => {
   return Session.create({ userId, ...createSession() });
 };
 
+export const refreshUserSession = async (sessionId, refreshToken) => {
+  const session = await Session.findOne({ _id: sessionId, refreshToken });
+  if (session === null) {
+    throw createHttpError(401, 'Session not found');
+  }
+
+  if (new Date() > new Date(session.refreshTokenValidUntil)) {
+    throw createHttpError(401, 'Refresh token is expired');
+  }
+};
+
 export const logoutUser = async (sessionId) => {
-  return Session.deleteOne({ _id: sessionId });
-}; //19-08 видаляємо цей документ з значенням _id: sessionId
+  // return Session.deleteOne({ _id: sessionId });
+  await Session.deleteOne({ _id: sessionId });
+}; //19-08 видаляємо цей документ зі значенням _id: sessionId
 
 //web-1 mod-5
 // import createHttpError from 'http-errors';

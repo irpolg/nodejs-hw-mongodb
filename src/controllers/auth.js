@@ -1,6 +1,3 @@
-//import { registerUser } from '../services/auth.js';
-
-// //import { registerUser, loginUser } from '../services/auth.js';
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import {
@@ -55,18 +52,23 @@ export const loginUserController = async (req, res) => {
   });
 };
 
+export const refreshUserController = async (req, res) => {
+  const { sessionId, refreshToken } = req.cookies;
+  res.send('Refresh'); //перевірили чи немає помилок для роута
+};
+
 export const logoutController = async (req, res) => {
   const { sessionId } = req.cookies;
-  //if (typeof req.cookies.sessionId === 'string') {
+
   if (typeof sessionId === 'string') {
+    //if (typeof req.cookies.sessionId === 'string')
     await logoutUser(sessionId);
   } // видалили сесію
 
   res.clearCookie('refreshToken');
   res.clearCookie('sessionId');
-
   //console.log(req.cookies);
-  //res.send('Logout');
+  //res.send('Logout'); //перевірили чи немає помилок для роута -вебінар -21 хв
   res.status(204).end(); //нема що повертати користувачу
 };
 
@@ -80,9 +82,4 @@ export const logoutController = async (req, res) => {
 
 //   const registeredUser = await registerUser(payload);
 //   res.send({ status: 200, message: 'User registered', data: registeredUser });
-// }
-
-//вебінар - для перевірки Постман (поки що без логіки і перевірили чи немає помилок для роута) - 21 хв
-// export async function registerUserController(req, res) {
-//   res.send('Register');
 // }
