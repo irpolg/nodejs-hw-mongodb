@@ -22,6 +22,10 @@ export const setupSession = async (userId) => {
   return Session.create({ userId, ...createSession() });
 };
 
+export const logoutUser = async (sessionId) => {
+  return Session.deleteOne({ _id: sessionId });
+}; //19-08 видаляємо цей документ з значенням _id: sessionId
+
 //web-1 mod-5
 // import createHttpError from 'http-errors';
 // export async function registerUser(payload) {
