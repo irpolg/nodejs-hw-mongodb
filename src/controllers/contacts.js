@@ -12,6 +12,8 @@ import {
 } from '../services/contacts.js';
 
 export const getAllContactsController = async (req, res, next) => {
+  console.log(req.user); //5HW - 7krok
+
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
   parseSortParams(req.query);

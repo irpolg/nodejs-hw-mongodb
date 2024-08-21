@@ -3,8 +3,8 @@ import { randomBytes } from 'crypto';
 export const createSession = () => {
   const accessToken = randomBytes(30).toString('base64');
   const refreshToken = randomBytes(30).toString('base64');
-  const accessTokenValidUntil = Date.now() + 1000 * 60 * 15;
-  const refreshTokenValidUntil = Date.now() + 1000 * 60 * 60 * 24 * 30;
+  const accessTokenValidUntil = Date.now() + 15 * 60 * 1000;
+  const refreshTokenValidUntil = Date.now() + 30 * 24 * 60 * 60 * 1000;
 
   return {
     accessToken,
