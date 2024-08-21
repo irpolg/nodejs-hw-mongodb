@@ -6,13 +6,14 @@ export async function getAllContacts({
   perPage,
   sortBy,
   sortOrder,
+  userId,
   //filter,
 }) {
   const skip = page > 0 ? (page - 1) * perPage : 0;
 
   const [contacts, count] = await Promise.all([
     // ContactsCollection.find().sort({ name: 1 }).skip(skip).limit(perPage),
-    ContactsCollection.find()
+    ContactsCollection.find({ userId })
       .sort({ [sortBy]: sortOrder })
       .skip(skip)
       .limit(perPage),
@@ -32,27 +33,35 @@ export async function getAllContacts({
   };
 }
 
-export const getContactById = (contactId) =>
-  ContactsCollection.findById(contactId);
+export const getContactById = (contactId, userId) =>
+  //ContactsCollection.findById(contactId);
+  ContactsCollection.findOne({ _id: contactId, userId });
 
 //конспект
 export const createContact = async (payload) => {
   return await ContactsCollection.create(payload);
 };
 
-export const deleteContact = async (contactId) => {
+export const deleteContact = async (contactId, userId) => {
   //console.log(contactId);
-  const contact = await ContactsCollection.findByIdAndDelete(contactId);
+  const contact = await ContactsCollection.findOneAndDelete({
+    _id: contactId,
+    userId,
+  });
   //console.log(contact);
   return contact;
 };
 
 //вебінар-2
-export function patchContact(contactId, updateData) {
-  return ContactsCollection.findByIdAndUpdate(contactId, updateData, {
-    new: true, //повертати оновлену версію документа
-    runValidators: true, // та запускати валідатори
-  });
+export function patchContact(contactId, updateData, userId) {
+  return ContactsCollection.findOneAndUpdate(
+    { _id: contactId, userId },
+    updateData,
+    {
+      new: true, //повертати оновлену версію документа
+      runValidators: true, // та запускати валідатори
+    },
+  );
 }
 // export function patchContactFavourite(contactId, updateData) {
 //   return ContactsCollection.findByIdAndUpdate(contactId, updateData, {

@@ -122,7 +122,8 @@ export const authenticate = async (req, res, next) => {
     return next(createHttpError(401, 'user null - Session not found!'));
   }
 
-  req.user = user;
+    req.user = user; // дозаписали властивість user
+
 
   next();
 };

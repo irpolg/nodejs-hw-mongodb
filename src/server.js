@@ -33,12 +33,10 @@ export const setupServer = () => {
       message: 'Welcome to Contacts Web Service !',
     });
   });
-  //19-08-2024 ДЗ-5 - authenticate додала
-  app.use(authenticate, contactsRouter);
-  //app.use(contactsRouter); 19-08-2024 змінила для ДЗ-5
 
-  //   app.use('/auth', authRouter); //HW-5 17-08-2024
-  app.use(authRouter); //HW-5 17-08-2024
+  app.use('/auth', authRouter); //HW-5 17-08-2024
+
+  app.use('/contacts', authenticate, contactsRouter);
 
   app.use('*', notFoundHandler);
 

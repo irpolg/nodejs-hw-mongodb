@@ -15,20 +15,20 @@ const jsonParser = express.json();
 // треба jsonParser, бо будемо передавати дані про користувача в Body
 
 router.post(
-  '/auth/register',
+  '/register',
   jsonParser,
   validateBody(registerUserSchema), //цей Body треба провалідувати і в цю мідлвару передамо схему
   ctrlWrapper(registerUserController), //якщо успішна валідація, то викликаємо метод з контролера
 );
 
 router.post(
-  '/auth/login',
+  '/login',
   validateBody(loginUserSchema),
   ctrlWrapper(loginUserController),
 );
 
-router.post('/auth/refresh', ctrlWrapper(refreshUserController));
+router.post('/refresh', ctrlWrapper(refreshUserController));
 
-router.post('/auth/logout', ctrlWrapper(logoutController));
+router.post('/logout', ctrlWrapper(logoutController));
 
 export default router;
