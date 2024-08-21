@@ -109,7 +109,7 @@ export const authenticate = async (req, res, next) => {
   //console.log('session >>', session);
 
   if (session === null) {
-    return next(createHttpError(401, 'authenticate - Session not found!'));
+    return next(createHttpError(401, 'Session not found!'));
   }
 
   if (new Date() > new Date(session.accessTokenValidUntil)) {
@@ -119,11 +119,10 @@ export const authenticate = async (req, res, next) => {
   //console.log('session 2 >>', session);
   const user = await User.findById(session.userId);
   if (user === null) {
-    return next(createHttpError(401, 'user null - Session not found!'));
+    return next(createHttpError(401, 'Session not found!'));
   }
 
-    req.user = user; // дозаписали властивість user
-
+  req.user = user; // дозаписали властивість user
 
   next();
 };
