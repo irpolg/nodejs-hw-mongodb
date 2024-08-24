@@ -6,6 +6,7 @@ import {
   setupSession,
   logoutUser,
   refreshUserSession,
+  sendResetEmail,
 } from '../services/auth.js';
 import { setupCookie } from '../utils/setupCookie.js';
 
@@ -83,6 +84,17 @@ export const logoutController = async (req, res) => {
   //console.log(req.cookies);
   //res.send('Logout'); //перевірили чи немає помилок для роута -вебінар -21 хв
   res.status(204).end(); //нема що повертати користувачу
+};
+
+export const sendResetEmailController = async (req, res) => {
+  const { email } = req.body;
+  await sendResetEmail(email); //нічого не повертає у відповідь
+  //res.send('Send Reset Email');
+  res.send({
+    status: 200,
+    message: 'Send email was successfully',
+    data: {}, // порожній об'єкт
+  });
 };
 
 //webinar 14-08-2024

@@ -1,15 +1,23 @@
 //import crypto from 'node:crypto';
-import bcrypt from 'bcrypt';
+
 //import randomBytes from 'randomBytes';
 import crypto from 'node:crypto';
-import { Session } from '../db/models/sessions.js';
-//import { createHttpError } from 'http-error';
-
-//blended 17-08-2024
-import { User } from '../db/models/user.js';
-import { createSession } from '../utils/createSession.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import createHttpError from 'http-errors';
-import { ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL } from '../constants/index.js';
+
+import { Session } from '../db/models/sessions.js';
+import { User } from '../db/models/user.js';
+
+import { createSession } from '../utils/createSession.js';
+
+import { sendMail } from '../utils/sendEmail.js';
+
+import {
+  ACCESS_TOKEN_TTL,
+  REFRESH_TOKEN_TTL,
+  SMTP,
+} from '../constants/index.js';
 
 export const findUserByEmail = (email) => User.findOne({ email });
 
@@ -51,6 +59,30 @@ export const logoutUser = async (sessionId) => {
   // return Session.deleteOne({ _id: sessionId });
   await Session.deleteOne({ _id: sessionId });
 }; //19-08 видаляємо цей документ зі значенням _id: sessionId
+
+export const sendResetEmail = async (email) => {
+  const user = await User.findOne({ email }); //email: email
+  if (user === null) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  const resetToken = jwt.sign(
+    {
+      sub: user._id,
+      email: user.email,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '5m' }, // 6HW- 5min
+  );
+
+  await sendMail({
+    from: SMTP.FROM_EMAIL, //наш особистий емейл
+    to: email, //емейл тут передали нам
+    subject: 'Reset your password',
+    html: `<p>Pleaseopen this <a href="http://www.google.com/reset-password?token=${resetToken}">link</a> to reset your password</p>`,
+    //html: `<p>Please</>`,
+  });
+};
 
 //web-1 mod-5
 // import createHttpError from 'http-errors';
