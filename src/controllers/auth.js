@@ -7,6 +7,7 @@ import {
   logoutUser,
   refreshUserSession,
   sendResetEmail,
+  resetPassword,
 } from '../services/auth.js';
 import { setupCookie } from '../utils/setupCookie.js';
 
@@ -94,6 +95,18 @@ export const sendResetEmailController = async (req, res) => {
     status: 200,
     message: 'Send email was successfully',
     data: {}, // порожній об'єкт
+  });
+};
+
+//скинути пароль
+export const resetPasswordController = async (req, res) => {
+  const { password, token } = req.body;
+  await resetPassword(password, token);
+  //res.send('Reset password');
+  res.send({
+    status: 200,
+    message: 'Password reset successfully',
+    data: {}, // даних немає, тому порожній масив
   });
 };
 

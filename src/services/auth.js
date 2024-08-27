@@ -84,6 +84,33 @@ export const sendResetEmail = async (email) => {
   });
 };
 
+export async function resetPassword(password, token) {
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded);
+    const user = await User.findOne({ _id: decoded.sub, email: decoded.email });
+
+    if (user === null) {
+      throw createHttpError(404, 'User not found!');
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.findOneAndUpdate(
+      { _id: user._id },
+      { password: hashedPassword },
+    );
+  } catch (error) {
+    if (
+      error.name === 'TokenExpireError' ||
+      error.name === 'JsonWebTokenError'
+    ) {
+      throw createHttpError(401, 'Token error');
+    }
+    throw error;
+  }
+
+  console.log({ password, token });
+}
+
 //web-1 mod-5
 // import createHttpError from 'http-errors';
 // export async function registerUser(payload) {

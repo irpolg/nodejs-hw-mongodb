@@ -8,11 +8,13 @@ import {
   logoutController,
   refreshUserController,
   sendResetEmailController,
+  resetPasswordController,
 } from '../controllers/auth.js';
 import {
   registerUserSchema,
   loginUserSchema,
   sendResetEmailSchema,
+  resetPasswordSchema,
 } from '../validation/auth.js';
 
 const router = express.Router();
@@ -41,6 +43,13 @@ router.post(
   jsonParser,
   validateBody(sendResetEmailSchema),
   ctrlWrapper(sendResetEmailController),
+);
+
+router.post(
+  '/reset-password',
+  jsonParser,
+  validateBody(resetPasswordSchema),
+  ctrlWrapper(resetPasswordController),
 );
 
 export default router;
