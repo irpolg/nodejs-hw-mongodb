@@ -2,6 +2,7 @@
 import express from 'express';
 import { validateBody } from '../middleware/validateBody.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+
 import {
   registerUserController,
   loginUserController,
@@ -46,7 +47,7 @@ router.post(
 );
 
 router.post(
-  '/reset-password',
+  '/reset-pwd', //'/reset-password',
   jsonParser,
   validateBody(resetPasswordSchema),
   ctrlWrapper(resetPasswordController),

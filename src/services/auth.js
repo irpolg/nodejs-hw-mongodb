@@ -1,9 +1,14 @@
 //import crypto from 'node:crypto';
 
 //import randomBytes from 'randomBytes';
+
+import fs from 'node:fs';
+import path from 'node:path';
+
 import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import handlebars from 'handlebars';
 import createHttpError from 'http-errors';
 
 import { Session } from '../db/models/sessions.js';
@@ -75,13 +80,26 @@ export const sendResetEmail = async (email) => {
     { expiresIn: '5m' }, // 6HW- 5min
   );
 
-  await sendMail({
-    from: SMTP.FROM_EMAIL, //наш особистий емейл
-    to: email, //емейл тут передали нам
-    subject: 'Reset your password',
-    html: `<p>Pleaseopen this <a href="http://www.google.com/reset-password?token=${resetToken}">link</a> to reset your password</p>`,
-    //html: `<p>Please</>`,
-  });
+  const templateSource = fs.readFileSync(
+    path.resolve('src/templates/reset-password.hbs'),
+    { encoding: 'UTF-8' },
+  );
+
+  const template = handlebars.compile(templateSource);
+
+  const html = template({ name: user.name, resetToken });
+
+  try {
+    await sendMail({
+      from: SMTP.FROM_EMAIL, //наш особистий емейл
+      to: email, //емейл тут передали нам
+      subject: 'Reset your password',
+      //html: `<p>Pleaseopen this <a href="http://www.google.com/reset-password?token=${resetToken}">link</a> to reset your password</p>`,
+      html,
+    });
+  } catch {
+    throw createHttpError(500, 'Cannot send email');
+  }
 };
 
 export async function resetPassword(password, token) {

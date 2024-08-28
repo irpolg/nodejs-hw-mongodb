@@ -9,6 +9,8 @@ import {
   //patchContactFavouriteController,
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+
+import { upload } from '../middleware/upload.js';
 import { validateBody } from '../middleware/validateBody.js';
 import {
   contactSchema,
@@ -33,6 +35,7 @@ router.get(
 router.post(
   '/',
   jsonParser,
+  upload.single('photo'), //ДЗ-6 для фото
   validateBody(contactSchema),
   ctrlWrapper(createContactController),
 );
