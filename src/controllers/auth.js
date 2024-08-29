@@ -105,7 +105,7 @@ export const resetPasswordController = async (req, res) => {
   //res.send('Reset password');
   res.send({
     status: 200,
-    message: 'Password reset successfully',
+    message: 'Password has been successfully reset',
     data: {}, // даних немає, тому порожній масив
   });
 };

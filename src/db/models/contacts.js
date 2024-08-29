@@ -28,6 +28,10 @@ const contactSchema = new Schema(
       default: 'personal',
     },
     userId: { type: Schema.Types.ObjectId, ref: 'users' },
+    photo: {
+      type: String,
+      default: null,
+    }, // HW-6 29-08-2024
   },
   {
     timestamps: true,

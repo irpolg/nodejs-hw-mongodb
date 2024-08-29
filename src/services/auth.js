@@ -98,7 +98,10 @@ export const sendResetEmail = async (email) => {
       html,
     });
   } catch {
-    throw createHttpError(500, 'Cannot send email');
+    throw createHttpError(
+      500,
+      'Failed to send the email, please try again later',
+    );
   }
 };
 
@@ -121,7 +124,7 @@ export async function resetPassword(password, token) {
       error.name === 'TokenExpireError' ||
       error.name === 'JsonWebTokenError'
     ) {
-      throw createHttpError(401, 'Token error');
+      throw createHttpError(401, 'Token is expired or invalid');
     }
     throw error;
   }

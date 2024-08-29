@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { env } from './utils/env.js';
 import express from 'express';
 import cookieParser from 'cookie-parser'; // 19-08-2024 webinar2 - 16-08-2024
@@ -33,6 +34,8 @@ export const setupServer = () => {
       message: 'Welcome to Contacts Web Service !',
     });
   });
+
+  app.use('/avatars', express.static(path.resolve('src', 'public/avatars'))); //hw-6 29-08-2024
 
   app.use('/auth', authRouter); //HW-5 17-08-2024
 

@@ -1,4 +1,8 @@
+import * as fs from 'node:fs/promises';
+import path from 'node:path';
+
 import createHttpError from 'http-errors';
+
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 
@@ -50,7 +54,24 @@ export const getIdContactController = async (req, res, next) => {
 export const createContactController = async (req, res) => {
   //console.log(req.body);
 
-  const newContact = await createContact({ ...req.body, userId: req.user._id });
+  let photo = null; //hw-6
+  //const photo = null;
+
+  if (typeof req.file !== 'undefined') {
+    await fs.rename(
+      req.file.path,
+      path.resolve('src', 'public/avatars', req.file.filename),
+    );
+    photo = `http://localhost:8080/avatars/${req.file.filename}`;
+  }
+
+  //const newContact = await createContact({ ...req.body, userId: req.user._id });
+  const newContact = await createContact({
+    ...req.body,
+    userId: req.user._id,
+    photo,
+    //photo: req.file,
+  }); //hw-6   29-08-2024
 
   // res.status(201).json({
   res.status(201).send({
