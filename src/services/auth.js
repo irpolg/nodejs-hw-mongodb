@@ -88,7 +88,7 @@ export const sendResetEmail = async (email) => {
   const template = handlebars.compile(templateSource);
 
   const html = template({ name: user.name, resetToken });
-
+  console.log('SMTP.FROM_EMAIL >> ', SMTP.FROM_EMAIL);
   try {
     await sendMail({
       from: SMTP.FROM_EMAIL, //наш особистий емейл
@@ -97,7 +97,8 @@ export const sendResetEmail = async (email) => {
       //html: `<p>Pleaseopen this <a href="http://www.google.com/reset-password?token=${resetToken}">link</a> to reset your password</p>`,
       html,
     });
-  } catch {
+  } catch (error) {
+    console.log('error >> ', error);
     throw createHttpError(
       500,
       'Failed to send the email, please try again later',

@@ -89,8 +89,9 @@ export const logoutController = async (req, res) => {
 
 export const sendResetEmailController = async (req, res) => {
   const { email } = req.body;
+  console.log('dosend-email');
   await sendResetEmail(email); //нічого не повертає у відповідь
-  //res.send('Send Reset Email');
+  console.log('email >>', email);
   res.send({
     status: 200,
     message: 'Send email was successfully',

@@ -5,6 +5,7 @@ import createHttpError from 'http-errors';
 
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
+import { uploadToCloudinary } from '../utils/uploadToCloudinary.js';
 
 import {
   getAllContacts,
@@ -52,28 +53,27 @@ export const getIdContactController = async (req, res, next) => {
 };
 
 export const createContactController = async (req, res) => {
-  //console.log(req.body);
-
-  let photo = null; //hw-6
-  //const photo = null;
+  let photo = null;
 
   if (typeof req.file !== 'undefined') {
-    await fs.rename(
-      req.file.path,
-      path.resolve('src', 'public/avatars', req.file.filename),
-    );
-    photo = `http://localhost:8080/avatars/${req.file.filename}`;
+    if (process.env.ENABLE_CLOUDINARY === 'true') {
+      const result = await uploadToCloudinary(req.file.path);
+      photo = result.secure_url;
+    } else {
+      await fs.rename(
+        req.file.path,
+        path.resolve('src', 'public/avatars', req.file.filename),
+      );
+      photo = `http://localhost:8080/avatars/${req.file.filename}`;
+    }
   }
-
-  //const newContact = await createContact({ ...req.body, userId: req.user._id });
+  console.log('photo >> ', photo);
   const newContact = await createContact({
     ...req.body,
     userId: req.user._id,
     photo,
-    //photo: req.file,
-  }); //hw-6   29-08-2024
+  });
 
-  // res.status(201).json({
   res.status(201).send({
     status: 201,
     message: 'Successfully created a contact!',
@@ -93,10 +93,26 @@ export const deleteContactController = async (req, res, next) => {
 
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
+  let photo = null;
 
-  //const updateData = req.body;
-  //const result = await patchContact(contactId, updateData);
-  const result = await patchContact(contactId, req.body, req.user._id);
+  if (typeof req.file !== 'undefined') {
+    if (process.env.ENABLE_CLOUDINARY === 'true') {
+      const result = await uploadToCloudinary(req.file.path);
+      photo = result.secure_url;
+    } else {
+      await fs.rename(
+        req.file.path,
+        path.resolve('src', 'public/avatars', req.file.filename),
+      );
+      photo = `http://localhost:8080/avatars/${req.file.filename}`;
+    }
+  }
+
+  const result = await patchContact(
+    contactId,
+    { ...req.body, photo },
+    req.user._id,
+  );
   console.log('result>>', result);
   if (!result) {
     next(createHttpError(404, 'Contact not found'));
