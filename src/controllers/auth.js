@@ -39,7 +39,7 @@ export const loginUserController = async (req, res) => {
     throw createHttpError(401, 'User not authorized!');
   }
 
-  const isEqualPassword = bcrypt.compare(password, user.password);
+  const isEqualPassword = await bcrypt.compare(password, user.password);
   if (!isEqualPassword) {
     throw createHttpError(401, 'User not authorized!');
   }
