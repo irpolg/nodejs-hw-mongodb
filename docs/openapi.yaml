@@ -15,7 +15,13 @@ tags:
 servers:
   - url: http://localhost:8080
 #  - url: #посилання на задеплоєний сайт
-#paths:
+paths:
+  /contacts/{id}:
+    get:
+      $ref: ../swagger/paths/contacts/{id}/get.yaml
+  /contacts:
+    post:
+      $ref: ../swagger/paths/contacts/post.yaml
 #    тут будуть посилання на ендпоінти
 components:
   securitySchemes:
