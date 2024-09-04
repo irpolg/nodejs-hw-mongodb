@@ -11,6 +11,7 @@ import contactsRouter from './routers/contacts.js';
 import authRouter from './routers/auth.js';
 // 19-08-2024 ДЗ-5 - додала
 import { authenticate } from './middleware/authenticate.js';
+import { swaggerDocs } from './middleware/swaggerDocs.js';
 
 //отримує значення змінної середовища 'PORT' або '3000'
 const PORT = Number(env('PORT', '3000'));
@@ -28,6 +29,8 @@ export const setupServer = () => {
   );
 
   app.use(cors());
+
+  app.use('/api-docs', swaggerDocs());
 
   app.get('/', (req, res) => {
     res.json({

@@ -30,13 +30,14 @@ requestBody:
           isFavorite:
             description: 'It is the favorite phoneNumber or not?'
             type: boolean
-            default: false # при створенні не треба взагалі-то
+            #default: false # при створенні не треба взагалі-то
             example: false
           photo:
             description: 'Contact`s photo'
             type: string
-            default: null
-            example: https://res.cloudinary.com/doux2lxg9/image/upload/v1725032014/lgibgi5ekdltiredhz1k.jpg
+            format: binary
+            #example: https://res.cloudinary.com/doux2lxg9/image/upload/v1725032014/lgibgi5ekdltiredhz1k.jpg
+            #default: null
 responses:
   '201':
     description: 'Created a contact'

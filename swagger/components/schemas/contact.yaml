@@ -35,9 +35,9 @@ properties:
     type: string
     enum: ['work', 'home', 'personal']
     example: work
-  # parentId:
+  # parentId: description: 'Contact`s parentId'
   userId:
-    description: 'Contact`s parentId'
+    description: 'Contact`s userId'
     type: string
     example: 66a902a975b0fc3c18397a5c
   photo:
