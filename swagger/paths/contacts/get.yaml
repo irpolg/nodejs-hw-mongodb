@@ -1,0 +1,116 @@
+tags:
+  - Contacts
+summary: Get list of contacts
+operationId: getContacts
+description: ‘Get list of contacts'
+security:
+  - bearerAuth: []
+parameters:
+  - in: query
+    name: page
+    #required: true
+    schema:
+      type: integer
+      example: 1
+    description: "Which 'page' of paginated results to return"
+  - in: query
+    name: perPage
+    schema:
+      type: integer
+      example: 10
+      default: 15
+    description: 'Number of contacts returned per page'
+  - in: query
+    name: sortBy
+    schema:
+      type: string
+      example: 'name'
+    description: 'All contact`s fields can be mentioned. Default value for sorting is _id'
+  - in: query
+    name: sortOrder
+    schema:
+      type: string
+      enum: ['asc', 'desc']
+      example: 'asc'
+      default: asc
+    description: "Sort of contact's name by asc or desc"
+  - in: query
+    name: contactType
+    schema:
+      enum: ['work', 'home', 'personal']
+      example: work
+    description: 'Filter of contactType'
+responses:
+  '200':
+    description: 'Successfully found contacts!'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Succesfully found contacts!'
+            data:
+              type: object
+              required:
+                - data
+                - page
+                - perPage
+                - totalItems
+                - totalPages
+                - hasNextPage
+                - hasPreviousPage
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: ../../components/schemas/contact.yaml
+                page:
+                  type: number
+                  example: 2
+                perPage:
+                  type: number
+                  example: 4
+                totalItems:
+                  type: number
+                  example: 4
+                totalPages:
+                  type: number
+                  example: 4
+                hasNextPage:
+                  type: boolean
+                  example: false
+                hasPreviousPage:
+                  type: boolean
+                  example: true
+
+  '401':
+    $ref: ../../components/responses/401.yaml
+  # '404':
+  #   description: 'List of contacts not found'
+  #   content:
+  #     application/json:
+  #       schema:
+  #         type: object
+  #         required:
+  #           - status
+  #           - message
+  #           - data
+  #         properties:
+  #           status:
+  #             type: integer
+  #             example: 404
+  #           message:
+  #             type: string
+  #             example: 'List of contacts not found'
+  #           data:
+  #             type: object
+  #             example: {}

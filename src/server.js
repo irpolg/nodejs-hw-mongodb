@@ -30,7 +30,7 @@ export const setupServer = () => {
 
   app.use(cors());
 
-  app.use('/api-docs', swaggerDocs());
+  app.use('/api-docs', swaggerDocs()); //7hw - 04-09-2024
 
   app.get('/', (req, res) => {
     res.json({
