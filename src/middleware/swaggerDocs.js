@@ -12,7 +12,7 @@ export function swaggerDocs() {
         encoding: 'utf-8',
       },
     );
-    //console.log('doc >> ', doc);
+    console.log('doc >> ', doc);
     return [...swaggerUI.serve, swaggerUI.setup(doc)];
   } catch (error) {
     console.error(error); //виведем в логи помилку, а користувачеві про неї не потрібно знати

@@ -14,7 +14,8 @@ tags:
     description: Auth operations.
 servers:
   - url: http://localhost:8080
-#  - url: #посилання на задеплоєний сайт
+  - url: https://nodejs-hw-mongodb-kmpb.onrender.com
+  #посилання на задеплоєний сайт
 paths:
   /contacts/{id}:
     get:
