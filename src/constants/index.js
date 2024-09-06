@@ -1,3 +1,4 @@
+//import path from 'node:path'; //06-09-2024
 export const SORT_ORDER = {
   ASC: 'asc',
   DESC: 'desc',
@@ -13,3 +14,5 @@ export const SMTP = {
   PASSWORD: process.env.SMTP_PASSWORD,
   FROM_EMAIL: process.env.SMTP_FROM_EMAIL,
 };
+//konspekt 06-09-2024
+//export const SWAGGER_PATH = path.join(process.cwd(), 'docs', 'swagger.json');
