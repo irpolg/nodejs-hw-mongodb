@@ -28,9 +28,9 @@ requestBody:
             type: string
             example: 'johndoe@gmail.com'
           isFavourite:
-            description: 'Contact`s favourite or not'
+            description: 'Contact`s is favourite or not'
             type: boolean
-            example: false
+            example: 'false'
           contactType:
             description: 'Contact`s type'
             type: string
