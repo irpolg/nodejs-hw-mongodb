@@ -30,7 +30,7 @@ requestBody:
           isFavourite:
             description: 'Contact`s is favourite or not'
             type: boolean
-            example: 'false'
+            example: false
           contactType:
             description: 'Contact`s type'
             type: string

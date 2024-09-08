@@ -408,7 +408,8 @@
                 "type": "object",
                 "required": [
                   "name",
-                  "phoneNumber"
+                  "phoneNumber",
+                  "contactType"
                 ],
                 "properties": {
                   "name": {
@@ -425,6 +426,11 @@
                     "description": "Contact`s email",
                     "type": "string",
                     "example": "johndoe@gmail.com"
+                  },
+                  "isFavourite": {
+                    "description": "Contact`s is favourite or not",
+                    "type": "boolean",
+                    "example": false
                   },
                   "contactType": {
                     "description": "Contact`s type",
